@@ -25,9 +25,17 @@
       <p class="tip" id="tip" role="status" aria-live="polite"></p>
     </form>
 
+    <section class="toolbar" aria-label="任务筛选">
+      <div class="filters" role="group" aria-label="按状态筛选">
+        <button class="filter-button active" type="button" data-filter="all" aria-pressed="true">全部</button>
+        <button class="filter-button" type="button" data-filter="active" aria-pressed="false">进行中</button>
+        <button class="filter-button" type="button" data-filter="done" aria-pressed="false">已完成</button>
+      </div>
+      <p id="task-stats" class="task-stats" aria-live="polite"></p>
+    </section>
+
     <ul id="task-list" class="task-list" aria-label="任务列表"></ul>
   </main>
   <script src="app.js"></script>
 </body>
 </html>
-

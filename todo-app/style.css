@@ -45,15 +45,26 @@ button { padding: 0 18px; border: 0; color: #fff; background: var(--ink); cursor
 button:hover { background: #265d7d; }
 .tip { min-height: 24px; margin: 7px 0 0; color: #a12d22; font-size: .92rem; }
 
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 16px; }
+.filters { display: flex; flex-wrap: wrap; gap: 7px; }
+.filter-button { min-height: 36px; padding: 0 13px; color: var(--ink); border: 1px solid var(--line); background: #fff; font-size: .9rem; }
+.filter-button:hover, .filter-button.active { color: #fff; border-color: var(--ink); background: var(--ink); }
+.task-stats { margin: 0; color: var(--muted); font-size: .9rem; text-align: right; white-space: nowrap; }
 .task-list { display: grid; gap: 10px; margin: 24px 0 0; padding: 0; list-style: none; }
 .task-item, .empty-tip { padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.task-item { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; }
 .task-text { overflow-wrap: anywhere; }
 .empty-tip { color: var(--muted); text-align: center; border-style: dashed; }
 .done .task-text { color: var(--muted); text-decoration: line-through; }
+.toggle-button { width: 26px; min-height: 26px; padding: 0; border: 2px solid var(--accent); border-radius: 50%; color: #fff; background: #fff; }
+.toggle-button:hover, .done .toggle-button { background: var(--accent); }
+.delete-button { min-height: 34px; padding: 0 12px; color: #9a3328; background: #fff2ee; font-size: .88rem; }
+.delete-button:hover { color: #fff; background: #9a3328; }
 
 @media (max-width: 520px) {
   body { padding: 18px 10px; }
   .app-shell { padding: 24px 18px; border-radius: 18px; }
   .input-row { grid-template-columns: 1fr; }
+  .toolbar { align-items: flex-start; flex-direction: column; }
+  .task-stats { text-align: left; }
 }
-
