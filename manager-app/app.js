@@ -9,6 +9,8 @@ const searchInput = document.querySelector("#search-input");
 const submitButton = document.querySelector("#submit-button");
 const cancelEditButton = document.querySelector("#cancel-edit");
 const exportButton = document.querySelector("#export-button");
+const storageTestButton = document.querySelector("#storage-test-button");
+const storageResult = document.querySelector("#storage-result");
 
 let places = [];
 let editingId = null;
@@ -223,6 +225,40 @@ exportButton.addEventListener("click", () => {
   downloadLink.remove();
   setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
   showMessage(`已导出 ${places.length} 条收藏数据`, "success");
+});
+
+storageTestButton.addEventListener("click", async () => {
+  const testKey = "homework5.storage.pressure-test";
+  const previousValue = localStorage.getItem(testKey);
+  const step = 256 * 1024;
+  const maximum = 12 * 1024 * 1024;
+  let lastSuccessfulSize = 0;
+
+  storageTestButton.disabled = true;
+  storageResult.textContent = "正在写入临时数据并寻找容量边界……";
+
+  try {
+    for (let size = step; size <= maximum; size += step) {
+      localStorage.setItem(testKey, "云".repeat(size));
+      lastSuccessfulSize = size;
+      if (size % (1024 * 1024) === 0) {
+        storageResult.textContent = `已成功写入约 ${(size / 1024 / 1024).toFixed(0)} MiB 字符数据，继续测试……`;
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+      }
+    }
+    storageResult.textContent = `达到实验上限 12 MiB 字符仍未触发配额错误；临时数据已清理。`;
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "QuotaExceededError") {
+      storageResult.textContent = `已捕获 QuotaExceededError；最后成功写入约 ${(lastSuccessfulSize / 1024 / 1024).toFixed(2)} MiB 字符数据，临时数据已清理。`;
+    } else {
+      console.warn("容量实验遇到非配额错误。", error);
+      storageResult.textContent = `实验遇到 ${error.name || "未知错误"}；临时数据已清理。`;
+    }
+  } finally {
+    if (previousValue === null) localStorage.removeItem(testKey);
+    else localStorage.setItem(testKey, previousValue);
+    storageTestButton.disabled = false;
+  }
 });
 
 places = loadPlaces();

@@ -73,6 +73,11 @@ button { min-height: 42px; padding: 0 16px; border: 0; border-radius: 9px; curso
 .search-field input { margin: 0; }
 .tool-button { color: #fff; background: var(--forest); white-space: nowrap; }
 .tool-button:hover { background: var(--forest-soft); }
+.experiment-button { color: var(--forest); border: 1px solid #b9c9c2; background: #eef4f1; }
+.experiment-button:hover { background: #dce9e3; }
+.tool-button:disabled { cursor: wait; opacity: .58; }
+.storage-result { min-height: 0; margin: -8px 0 18px; padding: 0; color: var(--forest-soft); font-size: .88rem; line-height: 1.6; }
+.storage-result:not(:empty) { padding: 10px 13px; border-left: 3px solid var(--gold); background: rgba(213,164,69,.12); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .place-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .place-card, .empty-state { border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
