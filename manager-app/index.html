@@ -64,7 +64,10 @@
         </div>
         <div class="form-footer">
           <p id="form-message" class="message" role="status" aria-live="polite"></p>
-          <button class="primary-button" type="submit">添加到收藏</button>
+          <div class="form-actions">
+            <button id="cancel-edit" class="secondary-button" type="button" hidden>取消编辑</button>
+            <button id="submit-button" class="primary-button" type="submit">添加到收藏</button>
+          </div>
         </div>
       </form>
     </section>
@@ -76,6 +79,12 @@
           <h2 id="collection-title">旅行收藏</h2>
         </div>
         <p id="collection-count" aria-live="polite">共 0 个地点</p>
+      </div>
+      <div class="collection-tools">
+        <label class="search-field" for="search-input">
+          <span class="visually-hidden">搜索地点</span>
+          <input id="search-input" type="search" placeholder="搜索名称、区域、类型或备注">
+        </label>
       </div>
       <div id="place-list" class="place-grid"></div>
     </section>
