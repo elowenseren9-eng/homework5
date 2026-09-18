@@ -1,5 +1,6 @@
 "use strict";
 
+const STORAGE_KEY = "homework5.todo.tasks";
 const form = document.querySelector("#add-form");
 const input = document.querySelector("#task-input");
 const tip = document.querySelector("#tip");
@@ -11,6 +12,38 @@ let tasks = [];
 let currentFilter = "all";
 
 const createTaskId = () => `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+const showTip = (message, type = "error") => {
+  tip.textContent = message;
+  tip.classList.toggle("success", type === "success");
+};
+
+const loadTasks = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) throw new TypeError("任务数据不是数组");
+    return parsed.filter((task) => (
+      task && typeof task.id === "string" && typeof task.text === "string" && typeof task.done === "boolean"
+    ));
+  } catch (error) {
+    console.warn("任务数据读取失败，已使用空列表。", error);
+    showTip("本地任务数据无法读取，已安全恢复为空列表");
+    return [];
+  }
+};
+
+const saveTasks = () => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    return true;
+  } catch (error) {
+    console.warn("任务数据保存失败。", error);
+    showTip("浏览器存储空间不足，当前修改未能保存");
+    return false;
+  }
+};
 
 const render = () => {
   list.replaceChildren();
@@ -70,7 +103,8 @@ form.addEventListener("submit", (event) => {
   }
 
   tasks.push({ id: createTaskId(), text, done: false });
-  tip.textContent = "";
+  saveTasks();
+  showTip("任务已添加", "success");
   input.value = "";
   render();
 });
@@ -100,7 +134,9 @@ list.addEventListener("click", (event) => {
   if (button.dataset.action === "delete") {
     tasks = tasks.filter((candidate) => candidate.id !== task.id);
   }
+  saveTasks();
   render();
 });
 
+tasks = loadTasks();
 render();
