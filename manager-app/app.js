@@ -150,13 +150,13 @@ const render = () => {
     actions.className = "card-actions";
     const editButton = document.createElement("button");
     editButton.type = "button";
+    editButton.dataset.action = "edit";
     editButton.textContent = "编辑";
-    editButton.addEventListener("click", () => startEdit(place.id));
     const deleteButton = document.createElement("button");
     deleteButton.type = "button";
     deleteButton.className = "delete-button";
+    deleteButton.dataset.action = "delete";
     deleteButton.textContent = "删除";
-    deleteButton.addEventListener("click", () => deletePlace(place.id));
     actions.append(editButton, deleteButton);
 
     card.append(top, note, actions);
@@ -193,6 +193,16 @@ cancelEditButton.addEventListener("click", () => {
 searchInput.addEventListener("input", () => {
   searchTerm = searchInput.value.trim();
   render();
+});
+
+// 事件委托：无论渲染多少张卡片，都只在父容器上注册一个单击监听器。
+list.addEventListener("click", (event) => {
+  const actionButton = event.target.closest("[data-action]");
+  const card = event.target.closest(".place-card");
+  if (!actionButton || !card || !list.contains(card)) return;
+
+  if (actionButton.dataset.action === "edit") startEdit(card.dataset.id);
+  if (actionButton.dataset.action === "delete") deletePlace(card.dataset.id);
 });
 
 places = loadPlaces();
