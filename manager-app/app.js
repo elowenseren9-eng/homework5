@@ -1,5 +1,6 @@
 "use strict";
 
+const STORAGE_KEY = "homework5.yunnan.places";
 const form = document.querySelector("#place-form");
 const list = document.querySelector("#place-list");
 const message = document.querySelector("#form-message");
@@ -30,9 +31,36 @@ const readForm = () => ({
 });
 
 const isValidPlace = (place) => (
-  place.name !== "" && place.region !== "" && place.type !== "" &&
+  place && typeof place.id === "string" && typeof place.name === "string" && place.name.trim() !== "" &&
+  typeof place.region === "string" && place.region !== "" && typeof place.type === "string" && place.type !== "" &&
+  typeof place.season === "string" && typeof place.note === "string" && place.note.length <= 160 &&
   Number.isInteger(place.rating) && place.rating >= 1 && place.rating <= 5
 );
+
+const loadPlaces = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) throw new TypeError("收藏数据不是数组");
+    return parsed.filter(isValidPlace);
+  } catch (error) {
+    console.warn("收藏数据读取失败，已使用空列表。", error);
+    showMessage("旧数据无法读取，已安全恢复为空收藏夹");
+    return [];
+  }
+};
+
+const savePlaces = () => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(places));
+    return true;
+  } catch (error) {
+    console.warn("收藏数据保存失败。", error);
+    showMessage("浏览器存储空间不足，本次修改未能保存");
+    return false;
+  }
+};
 
 const resetForm = () => {
   editingId = null;
@@ -66,6 +94,7 @@ const deletePlace = (id) => {
   places = places.filter((item) => item.id !== id);
   if (editingId === id) resetForm();
   showMessage(`已删除：${place.name}`, "success");
+  savePlaces();
   render();
 };
 
@@ -151,6 +180,7 @@ form.addEventListener("submit", (event) => {
     places.unshift(place);
     showMessage("地点已加入收藏", "success");
   }
+  savePlaces();
   resetForm();
   render();
 });
@@ -165,4 +195,5 @@ searchInput.addEventListener("input", () => {
   render();
 });
 
+places = loadPlaces();
 render();
