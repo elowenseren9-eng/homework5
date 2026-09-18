@@ -8,6 +8,7 @@ const count = document.querySelector("#collection-count");
 const searchInput = document.querySelector("#search-input");
 const submitButton = document.querySelector("#submit-button");
 const cancelEditButton = document.querySelector("#cancel-edit");
+const exportButton = document.querySelector("#export-button");
 
 let places = [];
 let editingId = null;
@@ -203,6 +204,25 @@ list.addEventListener("click", (event) => {
 
   if (actionButton.dataset.action === "edit") startEdit(card.dataset.id);
   if (actionButton.dataset.action === "delete") deletePlace(card.dataset.id);
+});
+
+exportButton.addEventListener("click", () => {
+  const exportData = {
+    app: "云南旅行收藏夹",
+    exportedAt: new Date().toISOString(),
+    count: places.length,
+    places
+  };
+  const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json;charset=utf-8" });
+  const objectUrl = URL.createObjectURL(blob);
+  const downloadLink = document.createElement("a");
+  downloadLink.href = objectUrl;
+  downloadLink.download = `云南旅行收藏-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  downloadLink.remove();
+  setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
+  showMessage(`已导出 ${places.length} 条收藏数据`, "success");
 });
 
 places = loadPlaces();

@@ -68,9 +68,11 @@ button { min-height: 42px; padding: 0 16px; border: 0; border-radius: 9px; curso
 
 .collection { padding: 72px 0 42px; }
 .collection-heading { align-items: center; }
-.collection-tools { display: flex; justify-content: flex-end; margin: -8px 0 20px; }
+.collection-tools { display: flex; justify-content: flex-end; gap: 10px; margin: -8px 0 20px; }
 .search-field { width: min(100%, 390px); }
 .search-field input { margin: 0; }
+.tool-button { color: #fff; background: var(--forest); white-space: nowrap; }
+.tool-button:hover { background: var(--forest-soft); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .place-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .place-card, .empty-state { border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
@@ -103,5 +105,7 @@ footer { padding: 28px 18px 38px; color: var(--muted); text-align: center; font-
   label, .rating-field, .wide-field { grid-column: span 6; }
   .form-actions, .primary-button { width: 100%; }
   .form-actions button { flex: 1; }
+  .collection-tools { align-items: stretch; flex-direction: column; }
+  .search-field { width: 100%; }
   .place-grid { grid-template-columns: 1fr; }
 }
